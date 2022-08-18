@@ -480,7 +480,7 @@ __metadata:
     eslint: 8.22.0
     eslint-config-next: 12.2.5
     next: 12.2.5
-    react: 18.2.0
+    react: ^18.2.0
     react-dom: 18.2.0
   languageName: unknown
   linkType: soft
@@ -1891,7 +1891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0":
+"react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
