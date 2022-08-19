@@ -3,6 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import Banner from "../components/banner/banner.component";
+import Card from "../components/card/card.component";
+
+import coffeeStores from "../data/coffee-stores.json";
 
 import styles from "../styles/Home.module.css";
 
@@ -24,9 +27,21 @@ export default function Home() {
           buttonText="View stores nearby"
           handleOnClick={handleOnBannerBtnClick}
         />
-        <Link href="/dynamic">
-          <a>Go to page dynamic</a>
-        </Link>
+        <div className={styles.heroImage}>
+          <Image src="/static/hero-image.png" width={700} height={400} />
+        </div>
+        <div className={styles.cardLayout}>
+          {coffeeStores.map((coffeeStore) => {
+            return (
+              <Card
+                name={coffeeStore.name}
+                imgUrl={coffeeStore.imgUrl}
+                href={`/coffee-store/${coffeeStore.id}`}
+                className={styles.card}
+              />
+            );
+          })}
+        </div>
       </main>
     </div>
   );
