@@ -1,20 +1,22 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Head from "next/head";
 
-const CoffeeStore = () => {
+const Name = () => {
   const router = useRouter();
   console.log("router", router);
   return (
     <div>
-      Coffee Store Page {router.query.id}
+      <Head>
+        <title>{router.query.name}</title>
+      </Head>
+      <h1>Name Page!</h1>
+      <p>Your name is: {router.query.name}</p>
       <Link href="/">
         <a>back to home</a>
-      </Link>
-      <Link href="/coffee-store/dynamic">
-        <a>Go to page dynamic</a>
       </Link>
     </div>
   );
 };
 
-export default CoffeeStore;
+export default Name;

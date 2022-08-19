@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 import Banner from "../components/banner/banner.component";
 
@@ -23,6 +24,9 @@ export default function Home() {
           buttonText="View stores nearby"
           handleOnClick={handleOnBannerBtnClick}
         />
+        <Link href="/dynamic">
+          <a>Go to page dynamic</a>
+        </Link>
       </main>
     </div>
   );
