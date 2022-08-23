@@ -40,6 +40,10 @@
   justify-content: center;
 }
 
+.sectionWrapper {
+  margin-top: 5rem;
+}
+
 /** Breakpoints:
   sm: min-width: 640px;
   md: min-width: 768px;
