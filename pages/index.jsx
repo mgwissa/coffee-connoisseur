@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,6 +28,22 @@ export default function Home(props) {
     UseTrackLocation();
 
   console.log({ latLong, locationErrorMsg });
+
+  useEffect(() => {
+    async () => {
+      if (latLong) {
+        try {
+          const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
+          console.log({ fetchedCoffeeStores });
+          //set coffee stores
+        } catch (error) {
+          //set error
+          console.log({ error });
+        }
+      }
+    };
+  }, [latLong]);
+
   const handleOnBannerBtnClick = () => {
     console.log("hi banner button");
     handleTrackLocation();
