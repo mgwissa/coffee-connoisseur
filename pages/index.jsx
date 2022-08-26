@@ -1,15 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
 
 import Banner from "../components/banner/banner.component";
 import Card from "../components/card/card.component";
 
-import coffeeStoresData from "../data/coffee-stores.json";
 import { fetchCoffeeStores } from "../lib/coffee-stores";
 import UseTrackLocation from "../hooks/use-track-location";
+import { ACTION_TYPES, StoreContext } from "./_app";
+
+import styles from "../styles/Home.module.css";
 
 export async function getStaticProps(context) {
   const coffeeStores = await fetchCoffeeStores();
@@ -21,27 +22,42 @@ export async function getStaticProps(context) {
   };
 }
 
-import styles from "../styles/Home.module.css";
-
 export default function Home(props) {
-  const { handleTrackLocation, latLong, locationErrorMsg, isFindingLocation } =
+  const { handleTrackLocation, locationErrorMsg, isFindingLocation } =
     UseTrackLocation();
+
+  // const [coffeeStores, setCoffeestores] = useState("");
+
+  const [coffeeStoresError, setCoffeestoresError] = useState(null);
+
+  const { dispatch, state } = useContext(StoreContext);
+
+  const { coffeeStores, latLong } = state;
 
   console.log({ latLong, locationErrorMsg });
 
   useEffect(() => {
-    async () => {
+    async function setCoffeeStoresByLocation() {
       if (latLong) {
         try {
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong);
+          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
           console.log({ fetchedCoffeeStores });
+          // setCoffeestores(fetchedCoffeeStores);
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: {
+              coffeeStores: fetchedCoffeeStores,
+            },
+          });
           //set coffee stores
         } catch (error) {
           //set error
-          console.log({ error });
+          console.log("Error", { error });
+          setCoffeeStoresError(error.message);
         }
       }
-    };
+    }
+    setCoffeeStoresByLocation();
   }, [latLong]);
 
   const handleOnBannerBtnClick = () => {
@@ -66,9 +82,32 @@ export default function Home(props) {
         <div className={styles.heroImage}>
           <Image src="/static/hero-image.png" width={700} height={400} />
         </div>
+
+        {coffeeStores.length > 0 && (
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Stores Near You</h2>
+            <div className={styles.cardLayout}>
+              {coffeeStores.map((coffeeStore) => {
+                return (
+                  <Card
+                    key={coffeeStore.id}
+                    name={coffeeStore.name}
+                    imgUrl={
+                      coffeeStore.imgUrl ||
+                      "https://images.unsplash.com/photo-1498804103079-a6351b050096?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2468&q=80"
+                    }
+                    href={`/coffee-store/${coffeeStore.id}`}
+                    className={styles.card}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {props.coffeeStores.length > 0 && (
           <div className={styles.sectionWrapper}>
-            <h2 className={styles.heading2}>Auburn Hills Stores</h2>
+            <h2 className={styles.heading2}>Toronto Stores</h2>
             <div className={styles.cardLayout}>
               {props.coffeeStores.map((coffeeStore) => {
                 return (
